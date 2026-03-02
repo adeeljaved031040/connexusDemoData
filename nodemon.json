@@ -1,0 +1,25 @@
+{
+  "watch": [
+    "server.js",
+    "*.js",
+    "routes",
+    "controllers",
+    "middleware"
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules/**",
+    "*.class",
+    "*.log",
+    ".git",
+    "public/**"
+  ],
+  "exec": "node server.js",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": 1000,
+  "verbose": true,
+  "legacyWatch": false
+}
+

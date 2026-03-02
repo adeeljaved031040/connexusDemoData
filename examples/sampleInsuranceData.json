@@ -1,0 +1,174 @@
+{
+	"documentType": "insurance_policy",
+	"insuranceCompanyName": "Owners Insurance Company",
+	"policyNumber": "244606-45545715-24",
+	"policyType": "Package Policy",
+	"policyDeductibles": [
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Basic Group I",
+			"type": "per occurrence"
+		},
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Basic Group II",
+			"type": "per occurrence"
+		},
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Special",
+			"type": "per occurrence"
+		},
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Theft",
+			"type": "per occurrence"
+		},
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Ordinance Or Law Coverage A-Undamaged Portion",
+			"type": "per occurrence"
+		},
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Ordinance Or Law Coverage B-Demolition",
+			"type": "per occurrence"
+		},
+		{
+			"amount": "1000",
+			"applicableToCoverages": "Ordinance Or Law Coverage C-Increased Cost",
+			"type": "per occurrence"
+		}
+	],
+	"isPrimaryPolicy": true,
+	"policyStartDate": "2024-12-18",
+	"policyEndDate": "2025-12-18",
+	"isPolicyExpired": true,
+	"isSentryAdditionalInsured": false,
+	"namedInsured": "KITTREDGE CROSSINGS SINGLE FAMILY ASSOCIATION",
+	"deficiencies": [
+		{
+			"deficiencyType": "Expired Policy",
+			"description": "Policy expired on 2025-12-18.",
+			"fieldAffected": "policyEndDate",
+			"remediation": "Please provide a current, active policy.",
+			"severity": "Critical"
+		},
+		{
+			"deficiencyType": "Sentry Not Additional Insured",
+			"description": "Sentry Management Inc. is not listed as an Additional Insured anywhere in the document.",
+			"fieldAffected": "isSentryAdditionalInsured",
+			"remediation": "Please provide an endorsement listing Sentry Management Inc. as an Additional Insured.",
+			"severity": "Critical"
+		}
+	],
+	"extractionReasoning": {
+		"annualPremium": {
+			"citation": "Page 1, under 'TOTAL POLICY PREMIUM IF PAID IN FULL'",
+			"reasoning": "The document explicitly states the total premium if paid in full, which is used as the annual premium.",
+			"value": 910.54
+		},
+		"isPrimaryPolicy": {
+			"citation": "Page 1, Title 'TAILORED PROTECTION POLICY DECLARATIONS'",
+			"reasoning": "The document is a policy declarations page, which is the primary document for a new policy, not an endorsement or amendment to an existing one.",
+			"value": true
+		},
+		"isSentryAdditionalInsured": {
+			"citation": "Entire Document",
+			"reasoning": "A comprehensive search of the entire document for 'Sentry Management Inc' and its variations yielded no results. The management company listed is 'ACT MANAGEMENT INC'.",
+			"value": false
+		},
+		"policyType": {
+			"citation": "Page 1, under 'THIS POLICY CONSISTS OF THE FOLLOWING COVERAGE PART(S):'",
+			"reasoning": "The policy declarations list both 'COMMERCIAL PROPERTY COVERAGE' and 'COMMERCIAL GENERAL LIABILITY COVERAGE', which indicates it is a package policy combining multiple lines of coverage.",
+			"value": "Package Policy"
+		}
+	},
+	"annualPremium": 910.54,
+	"brokerAgencyNumber": "25-0189-00",
+	"brokerName": "THE MAHONEY GROUP",
+	"generalLiabilityLimits": {
+		"eachOccurrence": 1000000,
+		"generalAggregate": 2000000,
+		"personalAdvInjury": 1000000,
+		"productsCompletedOps": 2000000
+	},
+	"insuranceCompanyNaic": "",
+	"namedInsuredAddress": "850 DECATUR AVE N GOLDEN VALLEY MN 55427-4348",
+	"otherCoverageLimits": [
+		{
+			"coverageType": "Accounts Receivable",
+			"limit": 200000,
+			"limitDescription": "Limit"
+		},
+		{
+			"coverageType": "Business Income & Extra Expense w/Rental Value",
+			"limit": 150000,
+			"limitDescription": "Limit"
+		},
+		{
+			"coverageType": "Employee Dishonesty",
+			"limit": 50000,
+			"limitDescription": "Limit"
+		},
+		{
+			"coverageType": "Forgery and Alteration",
+			"limit": 50000,
+			"limitDescription": "Limit"
+		},
+		{
+			"coverageType": "Assn Directors/Officers Errors and Omissions",
+			"limit": 1000000,
+			"limitDescription": "Aggregate"
+		},
+		{
+			"coverageType": "Assn Directors/Officers Errors and Omissions",
+			"limit": 1000000,
+			"limitDescription": "Per Occurrence"
+		},
+		{
+			"coverageType": "Hired Auto & Non-Owned Auto",
+			"limit": 1000000,
+			"limitDescription": "Each Occurrence"
+		}
+	],
+	"parentPolicyNumber": "",
+	"policyLimit": {
+		"perOccurrence": null,
+		"aggregate": null
+	},
+	"premiumBreakdown": {},
+	"propertyLimits": {
+		"buildings": [
+			{
+				"buildingLimit": 5000,
+				"businessIncomeLimit": 0,
+				"location": "7394 Kahler Cir Ne, Otsego, MN 55301-4560"
+			}
+		],
+		"totalInsuredValue": 5000
+	},
+	"scheduledUnderlyingInsurance": [],
+	"sentryAdditionalInsuredDetails": {
+		"endorsementNumber": null,
+		"address": null
+	},
+	"specialEndorsements": [],
+	"terrorismCoverageIncluded": true,
+	"umbrellaLimits": {
+		"eachOccurrence": null,
+		"aggregate": null
+	},
+	"id": "ikg1noFPxbHmD31TeCUUHB",
+	"_metaData": {
+		"createdAt": "2026-02-27T20:19:43.023Z",
+		"hash": "9a7bd59da00361c5567ff519112e6e04407a5f08a3f23bd57b0edb7ae3bb9338",
+		"id": "ikg1noFPxbHmD31TeCUUHB",
+		"schema": "native-object:extracted-insurance",
+		"type": "custom",
+		"updatedAt": "2026-02-27T20:19:43.023Z",
+		"version": 1,
+		"secrets": []
+	}
+}
+
