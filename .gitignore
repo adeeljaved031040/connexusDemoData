@@ -4,3 +4,8 @@ node_modules/
 .DS_Store
 .env
 
+# Git auth files (may contain tokens)
+setup-git-auth.sh
+fix-git-auth.sh
+GIT_AUTH_FIX.md
+

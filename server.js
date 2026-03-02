@@ -109,10 +109,32 @@ app.post('/process-insurance-data', (req, res) => {
       });
     }
 
+    // Debug logging - see what we're receiving
+    console.log('='.repeat(60));
+    console.log('Received request body keys:', Object.keys(insuranceData));
+    console.log('Has generalLiabilityLimits?', !!insuranceData.generalLiabilityLimits);
+    console.log('Has otherCoverageLimits?', !!insuranceData.otherCoverageLimits);
+    if (insuranceData.generalLiabilityLimits) {
+      console.log('GL Limits in request:', JSON.stringify(insuranceData.generalLiabilityLimits));
+    }
+    if (insuranceData.otherCoverageLimits) {
+      console.log('Other Coverage Limits count in request:', insuranceData.otherCoverageLimits.length);
+    }
+    console.log('='.repeat(60));
+
     // Process the data according to business rules
     const originalData = JSON.parse(JSON.stringify(insuranceData));
-    const processedData = InsuranceDataProcessor.process(insuranceData);
+    
+    // Create a fresh copy to avoid mutation issues
+    const dataToProcess = JSON.parse(JSON.stringify(insuranceData));
+    const processedData = InsuranceDataProcessor.process(dataToProcess);
     const summary = InsuranceDataProcessor.getProcessingSummary(originalData, processedData);
+
+    // Debug logging (remove in production)
+    console.log('Processing insurance data...');
+    console.log('GL Limits before:', originalData.generalLiabilityLimits);
+    console.log('GL Limits after:', processedData.generalLiabilityLimits);
+    console.log('Other Coverage Limits count:', processedData.otherCoverageLimits?.length);
 
     res.json({
       success: true,

@@ -26,6 +26,7 @@ class InsuranceDataProcessor {
    * General Liability Cleanup
    * - Confirm eachOccurrence and generalAggregate are present
    * - Filter out "Advertising" or "Personal Injury" limits from main eachOccurrence
+   * - PRESERVE existing valid data - DO NOT overwrite valid numbers
    */
   static validateGeneralLiabilityLimits(data) {
     if (!data.generalLiabilityLimits) {
@@ -38,12 +39,24 @@ class InsuranceDataProcessor {
       return;
     }
 
-    // Ensure required fields exist
-    if (typeof data.generalLiabilityLimits.eachOccurrence !== 'number') {
+    // PRESERVE existing valid values - only ensure structure exists
+    // If values are already numbers, keep them as-is
+    // Only set to null if the value is missing, undefined, or not a number
+    if (data.generalLiabilityLimits.eachOccurrence === undefined || 
+        (typeof data.generalLiabilityLimits.eachOccurrence !== 'number' && data.generalLiabilityLimits.eachOccurrence !== null)) {
       data.generalLiabilityLimits.eachOccurrence = null;
     }
-    if (typeof data.generalLiabilityLimits.generalAggregate !== 'number') {
+    if (data.generalLiabilityLimits.generalAggregate === undefined || 
+        (typeof data.generalLiabilityLimits.generalAggregate !== 'number' && data.generalLiabilityLimits.generalAggregate !== null)) {
       data.generalLiabilityLimits.generalAggregate = null;
+    }
+    if (data.generalLiabilityLimits.personalAdvInjury === undefined || 
+        (typeof data.generalLiabilityLimits.personalAdvInjury !== 'number' && data.generalLiabilityLimits.personalAdvInjury !== null)) {
+      data.generalLiabilityLimits.personalAdvInjury = null;
+    }
+    if (data.generalLiabilityLimits.productsCompletedOps === undefined || 
+        (typeof data.generalLiabilityLimits.productsCompletedOps !== 'number' && data.generalLiabilityLimits.productsCompletedOps !== null)) {
+      data.generalLiabilityLimits.productsCompletedOps = null;
     }
 
     // Note: The filter for "Advertising" or "Personal Injury" would be applied
@@ -85,9 +98,12 @@ class InsuranceDataProcessor {
 
   /**
    * Other Coverage Limits - Array Standardization
+   * Only include specific coverage types: Automobile, Crime, Cyber, and D&O
    * - D&O: Ensure separate entries for Per Occurrence and Aggregate
    * - Auto: Map "Hired Auto & Non-Owned Auto" as single entry with "Each Occurrence"
-   * - Crime: Group Employee Dishonesty and Forgery and Alteration
+   * - Crime: Employee Dishonesty and Forgery and Alteration
+   * - Cyber: Cyber-related coverages
+   * - EXCLUDE all other coverages (like Accounts Receivable, Business Income, etc.)
    */
   static standardizeOtherCoverageLimits(data) {
     if (!Array.isArray(data.otherCoverageLimits)) {
@@ -96,44 +112,28 @@ class InsuranceDataProcessor {
     }
 
     const processed = [];
-    const seenCoverages = new Set();
-
-    // Filter out coverages that should not be in otherCoverageLimits
-    const excludedCoverages = [
-      'Business Income',
-      'Business Interruption',
-      'Extra Expense',
-      'Terrorism',
-      'Ordinance',
-      'Ordinance Or Law'
-    ];
 
     for (const coverage of data.otherCoverageLimits) {
       const coverageType = coverage.coverageType || '';
+      const coverageTypeLower = coverageType.toLowerCase();
       
-      // Skip if it's a Business Income/Extra Expense coverage (should be separate)
-      const shouldExclude = excludedCoverages.some(excluded => 
-        coverageType.toLowerCase().includes(excluded.toLowerCase())
-      );
-
-      if (shouldExclude) {
-        continue; // Skip this coverage
-      }
-
-      // Handle D&O - ensure separate entries
-      if (coverageType.includes('Directors/Officers') || coverageType.includes('D&O') || coverageType.includes('Errors and Omissions')) {
+      // Handle D&O - ensure separate entries are preserved/created
+      if (coverageTypeLower.includes('directors/officers') || 
+          coverageTypeLower.includes('d&o') || 
+          coverageTypeLower.includes('errors and omissions') ||
+          coverageTypeLower.includes('e&o')) {
         const limitValue = coverage.limit || 0;
-        const limitDesc = coverage.limitDescription || '';
+        const limitDesc = (coverage.limitDescription || '').toLowerCase();
 
         // Create separate entries for Per Occurrence and Aggregate
-        if (limitDesc.toLowerCase().includes('occurrence') || limitDesc.toLowerCase().includes('per occurrence')) {
+        if (limitDesc.includes('per occurrence') || limitDesc.includes('occurrence')) {
           processed.push({
             coverageType: 'Assn Directors/Officers Errors and Omissions',
             limit: limitValue,
             limitDescription: 'Per Occurrence'
           });
         }
-        if (limitDesc.toLowerCase().includes('aggregate')) {
+        if (limitDesc.includes('aggregate')) {
           processed.push({
             coverageType: 'Assn Directors/Officers Errors and Omissions',
             limit: limitValue,
@@ -144,7 +144,10 @@ class InsuranceDataProcessor {
       }
 
       // Handle Auto - ensure single entry with "Each Occurrence"
-      if (coverageType.includes('Auto') || coverageType.includes('Hired Auto') || coverageType.includes('Non-Owned Auto')) {
+      if (coverageTypeLower.includes('auto') || 
+          coverageTypeLower.includes('hired auto') || 
+          coverageTypeLower.includes('non-owned auto') ||
+          coverageTypeLower.includes('automobile')) {
         processed.push({
           coverageType: 'Hired Auto & Non-Owned Auto',
           limit: coverage.limit || 0,
@@ -153,8 +156,10 @@ class InsuranceDataProcessor {
         continue;
       }
 
-      // Handle Crime coverages - keep as separate entries but ensure proper naming
-      if (coverageType.includes('Dishonesty') || coverageType.includes('Forgery')) {
+      // Handle Crime coverages - Employee Dishonesty and Forgery
+      if (coverageTypeLower.includes('dishonesty') || 
+          coverageTypeLower.includes('forgery') ||
+          coverageTypeLower.includes('crime')) {
         processed.push({
           coverageType: coverage.coverageType,
           limit: coverage.limit || 0,
@@ -163,12 +168,20 @@ class InsuranceDataProcessor {
         continue;
       }
 
-      // All other coverages - add as-is
-      processed.push({
-        coverageType: coverage.coverageType,
-        limit: coverage.limit || 0,
-        limitDescription: coverage.limitDescription || 'Limit'
-      });
+      // Handle Cyber coverages
+      if (coverageTypeLower.includes('cyber') || 
+          coverageTypeLower.includes('data breach') ||
+          coverageTypeLower.includes('privacy')) {
+        processed.push({
+          coverageType: coverage.coverageType,
+          limit: coverage.limit || 0,
+          limitDescription: coverage.limitDescription || 'Limit'
+        });
+        continue;
+      }
+
+      // EXCLUDE all other coverages (Accounts Receivable, Business Income, etc.)
+      // Do not add to processed array
     }
 
     // Remove duplicates based on coverageType and limitDescription

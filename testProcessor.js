@@ -18,6 +18,13 @@ console.log('\nOriginal Data:');
 console.log('- Policy Type:', sampleData.policyType);
 console.log('- Other Coverage Limits Count:', sampleData.otherCoverageLimits.length);
 console.log('- Property Total Insured Value:', sampleData.propertyLimits.totalInsuredValue);
+if (sampleData.generalLiabilityLimits) {
+  console.log('- General Liability Limits:');
+  console.log('  - Each Occurrence:', sampleData.generalLiabilityLimits.eachOccurrence);
+  console.log('  - General Aggregate:', sampleData.generalLiabilityLimits.generalAggregate);
+  console.log('  - Personal Adv Injury:', sampleData.generalLiabilityLimits.personalAdvInjury);
+  console.log('  - Products Completed Ops:', sampleData.generalLiabilityLimits.productsCompletedOps);
+}
 console.log('\nProcessing data...\n');
 
 // Process the data
@@ -28,6 +35,13 @@ console.log('Processed Data:');
 console.log('- Policy Type:', processedData.policyType);
 console.log('- Other Coverage Limits Count:', processedData.otherCoverageLimits.length);
 console.log('- Property Total Insured Value:', processedData.propertyLimits.totalInsuredValue);
+if (processedData.generalLiabilityLimits) {
+  console.log('- General Liability Limits:');
+  console.log('  - Each Occurrence:', processedData.generalLiabilityLimits.eachOccurrence);
+  console.log('  - General Aggregate:', processedData.generalLiabilityLimits.generalAggregate);
+  console.log('  - Personal Adv Injury:', processedData.generalLiabilityLimits.personalAdvInjury);
+  console.log('  - Products Completed Ops:', processedData.generalLiabilityLimits.productsCompletedOps);
+}
 console.log('\nProcessing Summary:');
 console.log(JSON.stringify(summary, null, 2));
 

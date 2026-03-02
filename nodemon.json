@@ -2,6 +2,7 @@
   "watch": [
     "server.js",
     "*.js",
+    "processors/**/*.js",
     "routes",
     "controllers",
     "middleware"
